@@ -1,0 +1,30 @@
+.error-header {
+	background-color: #ff6600;
+	font-family: 'Raleway', sans-serif;;
+	font-size: 1.2em;
+	font-style: italic;
+}
+
+.error-text {
+	background-color: #fff;
+	font-family: 'Raleway', Helvetica, Arial, Sans-Serif;
+	font-size: 1.0em;
+	padding: 30px 10px 30px 10px;
+}
+
+.error-table {
+	background-color: #ff6600;
+	border: 1px solid #ff6600;
+}
+
+.error-fatal {
+	font-family: 'Raleway', Helvetica, Arial, Sans-Serif;
+	background-color: #cc0000;
+	font-size: 1.4em;
+	padding: 10px;
+	color: #fff;
+}
+
+body {
+	font-family: 'Raleway', sans-serif;
+}
