@@ -40,7 +40,9 @@ class Database {
 			// var_dump( $result );
 			if( $stmt ) {
 				$result = $stmt->fetchAll( PDO::FETCH_ASSOC );
-			}
+			} else {
+        trigger_error( "QUERY FAILURE:: '$stmt' is false PDO::errorInfo():<br>" . $this->connection->errorInfo() );
+      }
 		} catch ( PDOException $e ) {
 			trigger_error( "QUERY FAILURE:: PDO::errorinfo():<br />" . $this->connection->errorInfo() );
 		}

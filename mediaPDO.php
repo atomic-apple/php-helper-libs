@@ -21,12 +21,12 @@ class Media extends AppObject {
 
 	public function __toString() {
 		// method that provides a human readable description of the Class.
-		$humanReadable = "<div class='col-md-8 text-center'>
+		$humanReadable = "
 		Media Title: {$this->mediaName}<br />
 		Media Duration: {$this->mediaDuration}<br />
 		Media Live (Y/N): ";
-		$humanReadable .= ( $this->mediaAvailable == 1) ? "Yes" : "No";
-		$humanReadable .= "<br /><br /></div>";
+		$humanReadable .= ( $this->mediaAvailable == 1 || $this->mediaAvailable == true ) ? "Yes" : "No";
+		$humanReadable .= "<br /><br />";
             return $humanReadable;
 	}
 
