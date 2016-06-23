@@ -1,7 +1,6 @@
 <?php
 
-class CSS extends AppObject {
-      
+class Meta extends AppObject {
      /*
             Methods inherited from AppObject:
             findByQuery( $qry ) => returns an instantiated instance of the Calling Class...
@@ -13,39 +12,27 @@ class CSS extends AppObject {
             cleanProperties() => ensures that the db CRUD methods use only db-safe data by escaping the properties...
             CRUD => Create, Update, Destroy database recordsets from instances...
      */
-      protected $cssID;
-      protected $cssName;
-      protected $cssText;
+      protected $metaID;
+      protected $metaName;
+      protected $metaText;
       
-      protected static $dbTable = 'css';
-      protected static $dbIndex = 'cssID';
+      protected static $dbTable = 'metas';
+      protected static $dbIndex = 'metaID';
       protected static $dbFields = array(
-            'cssID',
-            'cssName',
-            'cssText');
+            'metaID',
+            'metaName',
+            'metaText');
+      
       
       public function __toString() {
-            
+            $humanReadable = "";
+            $humanReadable .= "Meta ID: " . $this->jsID . "<br>";
+            $humanReadable .= "Meta Name: " . $this->jsName . "<br>";
+            $humanReadable .= "Meta Code: " . htmlspecialchars( $this->jsText ) . "<br>";
+            return $humanReadable;
       }
-      
-      public function setID( $id ) {
-            $this->cssID = $id;
-      }
-      
-      public function setText( $text ) {
-            $this->cssText = $text;
-      }
-      
-      public function getID() {
-            return $this->cssID;
-      }
-      
-      public function getText() {
-            return $this->cssText;
-      }
-      
-
-      
 }
+
+
 
 ?>
