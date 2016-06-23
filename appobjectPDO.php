@@ -21,7 +21,7 @@ class AppObject {
 	}
 
 	public static function findByID( $id ) {
-		// Takes the $id and fetches the recordset and returns and the found instance or FALSE is it
+		// Takes the $id and fetches the recordset and returns the found instance or FALSE is it
 		// doesn't exist
 		$sql = "SELECT * FROM " . static::$dbTable . " WHERE " . static::$dbIndex . " = " . $id . " LIMIT 1";
 		$theResultArray = static::findByQuery( $sql );

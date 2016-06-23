@@ -11,6 +11,7 @@ include_once( 'session.php' );
 include_once( 'appobjectPDO.php' );
 include_once( 'userPDO.php' );
 include_once( 'mediaPDO.php' );
+include_once( 'pagePDO.php' );
 
 set_error_handler( 'atomicErrors' );
 
