@@ -61,8 +61,9 @@ class AppObject {
 				$theObject->$theAttr = $value;
 			}
 		}
-
-		return $theObject;
+//     Uncomment to include Debugging output of instance creation...
+//       echo "DEBUGGING:<br>Instantiated...<br>" . $theObject . "<br>******************************<br>DEBUG ENDED<br><br>";
+		  return $theObject;
 	}
 
 	protected function hasTheAttr( $theAttr ) {
