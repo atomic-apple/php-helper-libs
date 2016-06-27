@@ -7,7 +7,9 @@ function __autoload( $class ) {
 
 	if( file_exists( $path ) ) {
 		require_once( $path );
-	} else {
+	} else if (file_exists( "${class}.cls.php" ) ) {
+            require_once( "{$class}.cls.php" );
+  } else {
 		die( "<br />FUNCTIONS:: __autoload=> Class Not Found Error! - {$class}" );
 	}
 }

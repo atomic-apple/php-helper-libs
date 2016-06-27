@@ -13,9 +13,9 @@ class CSS extends AppObject {
             cleanProperties() => ensures that the db CRUD methods use only db-safe data by escaping the properties...
             CRUD => Create, Update, Destroy database recordsets from instances...
      */
-      protected $cssID;
-      protected $cssName;
-      protected $cssText;
+      public $cssID;
+      public $cssName;
+      public $cssText;
       
       protected static $dbTable = 'css';
       protected static $dbIndex = 'cssID';
@@ -25,7 +25,12 @@ class CSS extends AppObject {
             'cssText');
       
       public function __toString() {
-            
+            $humanReadable = "<br>CSS Class Info<br>**************<br>";
+            $humanReadable .= "CSS ID: " . $this->cssID . "<br>";
+            $humanReadable .= "CSS Name: " . $this->cssName . "<br>";
+//             var_dump( $this );
+            $humanReadable .= "CSS Text: " . htmlspecialchars( $this->cssText ) . "<br>";
+            return $humanReadable;
       }
       
       public function setID( $id ) {

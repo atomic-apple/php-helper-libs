@@ -13,9 +13,9 @@ class JS extends AppObject {
             CRUD => Create, Update, Destroy database recordsets from instances...
      */
       
-      protected $jsID;
-      protected $jsName;
-      protected $jsText;
+      public $jsID;
+      public $jsName;
+      public $jsText;
       
       protected static $dbTable = 'js';
       protected static $dbIndex = 'jsID';

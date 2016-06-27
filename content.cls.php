@@ -1,7 +1,7 @@
 <?php
 
-class Meta extends AppObject {
-     /*
+class Content extends AppObject {
+      /*
             Methods inherited from AppObject:
             findByQuery( $qry ) => returns an instantiated instance of the Calling Class...
             findAll() => returns instantiated instances of all database records of the Calling Class...
@@ -12,27 +12,31 @@ class Meta extends AppObject {
             cleanProperties() => ensures that the db CRUD methods use only db-safe data by escaping the properties...
             CRUD => Create, Update, Destroy database recordsets from instances...
      */
-      public $metaID;
-      public $metaName;
-      public $metaText;
       
-      protected static $dbTable = 'metas';
-      protected static $dbIndex = 'metaID';
+      public $contentID;
+      public $contentName;
+      public $contentText;
+      public $contentActive;
+      
+      protected static $dbTable = 'content';
+      protected static $dbIndex = 'contentID';
       protected static $dbFields = array(
-            'metaID',
-            'metaName',
-            'metaText');
+            'contentID',
+            'contentName',
+            'contentText',
+            'contentActive');
       
-      
-      public function __toString() {
-            $humanReadable = "<br>Meta Class Information<br>**********************<br>";
-            $humanReadable .= "Meta ID: " . $this->metaID . "<br>";
-            $humanReadable .= "Meta Name: " . $this->metaName . "<br>";
-            $humanReadable .= "Meta Code: " . htmlspecialchars( $this->metaText ) . "<br>";
+      public function __tostring() {
+            $humanReadable = "";
+            $humanReadable .= "Content ID: " . $this->contentID . "<br>";
+            $humanReadable .= "Content Name: " . $this->contentName . "<br>";
+            $humanReadable .= "Content Code: " . htmlspecialchars( $this->contentText ) . "<br>";
+            $humanReadable .= "Content Active: ";
+            $humanReadable .= ( $this->contentActive == 1 || $this->contentActive == true ) ? "Yes" : "No";
+            $humanReadable .= "<br>";
             return $humanReadable;
       }
+      
 }
-
-
 
 ?>

@@ -1,5 +1,7 @@
  <?php
 
+include_once( 'page.init.inc.php' );
+
 class Page extends AppObject {
 
 	public $pageID;
@@ -19,34 +21,89 @@ class Page extends AppObject {
 		'pageHeaders',
 		'pageFooter');
 	protected $dbIndexVal;
+      
+      public function __construct( $id ) {
+            // The constructor assigns the pageID of the page for reading data from the Database.
+            // It then populates it's data structure using the database, and then Renders the data to
+            // the output buffer.
+            $this->pageID = $id;
+            $this->makePage();
+            $this->renderPage();
+      }
 
 	public function __toString() {
+            // This method provides a Human Readable description of the instance for debugging
             $humanReadable = "";
             $humanReadable .= "Page: " . $this->pageName . "<br>";
             $humanReadable .= "Page ID: " . $this->pageID . "<br>";
             foreach( $this->pageCSS as $cssEntry ) {
-                  $humanReadable .= "CSS: '" . $cssEntry . "'<br>";
+                  foreach( $cssEntry as $cssObject ) {
+                        $humanReadable .= "CSS: '" . htmlspecialchars( $cssObject->cssText ) . "'<br>";
+                  }
             }
             foreach( $this->pageJS as $jsEntry ) {
-                  $humanReadable .= "JS: '" . $jsEntry . "'<br>";
+                  foreach( $jsEntry as $jsObject ) {
+                        $humanReadable .= "JS: '" . htmlspecialchars( $jsObject->jsText ) . "'<br>";
+                  }
+            }
+            
+            foreach( $this->pageMeta as $metaIndex => $metaEntry ) {
+                  foreach( $metaEntry as $metaObject ){
+                        $humanReadable .= "Meta-Tag: ";
+                        $humanReadable .= htmlspecialchars( $metaObject->metaText );
+                        $humanReadable .= "<br>";
+                  }
+            }
+            foreach( $this->pageContent as $contentEntry ) {
+                  foreach( $contentEntry as $contentObject ){
+                        $humanReadable .= "Content: ";
+                        $humanReadable .= htmlspecialchars( $contentObject->metaText );
+                        $humanReadable .= "<br>";
+                  }
             }
             return $humanReadable;
 	}
+      
+      public function renderPage() {
+            // This method echoes the instance data to the output buffer in the order specified
+            echo $this->pageHeaders;
+            foreach( $this->pageCSS as $cssEntry ) {
+                  foreach( $cssEntry as $cssCode ) {
+                        echo $cssCode->cssText;
+                  }
+            }
+            foreach( $this->pageMeta as $metaEntry ) {
+                  foreach( $metaEntry as $metaCode ) {
+                        echo $metaCode->metaText;
+                  }
+            }
+            foreach( $this->pageContent as $contentEntry ) {
+                  foreach( $contentEntry as $contentCode ) {
+                        echo $contentCode->contentText;
+                  }
+            }
+            foreach( $this->pageJS as $jsEntry ) {
+                  foreach( $jsEntry as $jsCode ) {
+                        echo $jsCode->jsText;
+                  }
+            }
+            echo $this->pageFooter;
+      }
 
-	public function renderPage() {
+	public function makePage() {
+            // This method populates the instance with the data from the database for rendering...
             global $database;
             
-            $page = "";
-//             $section = array(
+//             For Reference, the classID for each component is:
 //                   1 => 'css',
 //                   2 => 'js',
 //                   3 => 'meta',
 //                   4 => 'content',
 //                   5 => 'header',
 //                   6 => 'footer'
-//             );
+            
             if( isset( $this->pageID ) ) {
-                  $qry = "SELECT * FROM `pageComponents` WHERE `pageID` = {$this->pageID}";
+                  $qry = "SELECT * FROM `pageComponents` WHERE `pageID` = '{$this->pageID}' AND `componentActive` = 1";
                   $result = $database->dbQuery( $qry );
                   
                   foreach( $result as $compKey => $component ) {
@@ -74,100 +131,57 @@ class Page extends AppObject {
             } else {
                   trigger_error( "Page Render Error:: PagePDO:: " . $result->errorInfo() );
             }
-
 	}
-      
-      
-      // Needs re-engineering to account for return of Assoc Array and pulling items from tables in database...
-// 	private function fetchMeta() {
-// 		global $database;
-
-// 		$qry = "SELECT * FROM `meta` WHERE `metaID` = {$metaID}";
-// 		$result = $database->dbQuery( $qry );
-
-// 		foreach ( $result as $metaEntry ) {
-// 			$this->pageMeta[] = $metaEntry;
-// 		}
-// 	}
       
       public function addMeta( $metaComponent ) {
             global $database;
             
             $qry = "SELECT * FROM `metas` WHERE `metaID` = {$metaComponent} LIMIT 1";
-//             echo $qry . "<br>";
-            $result = $database->dbQuery( $qry );
-            foreach( $result as $metaItem ) {
-                  $this->pageMeta[] = $metaItem['metaText'];
-//                   var_dump( $metaItem );
+            $newMeta = new Meta();
+            $metaArray = $newMeta::findByQuery( $qry );
+            if( $newMeta ) {
+                  $this->pageMeta[] = $metaArray;
+            } else {
+                  trigger_error( "$newMeta $component NOT FOUND Error:: pagePDO:: addMeta()..." );
             }
       }
-
-// 	private function fetchCSS() {
-// 		global $database;
-
-// 		$qry = "SELECT * FROM `css` WHERE `pageID` = {$this->pageID}";
-// 		$result = $database->dbQuery( $qry );
-
-// 		foreach( $result as $cssEntry ) {
-// 			$this->pageCSS[] = $cssEntry;
-// 		}
-// 	}
       
       public function addCSS( $cssComponent ) {
             global $database;
             
             $qry = "SELECT * FROM `css` WHERE `cssID` = {$cssComponent} LIMIT 1";
-//             echo $qry . "<br>";
-            $result = $database->dbQuery( $qry );
-            foreach( $result as $cssItem ) {
-                  $this->pageCSS[] = $cssItem['cssText'];
-//                   var_dump( $metaItem );
+            $newCSS = new CSS();
+            $cssArray = $newCSS::findByQuery( $qry );
+            if( $newCSS ) {
+                  $this->pageCSS[] = $cssArray;
+            } else {
+                  trigger_error( "newCSS $component NOT FOUND Error:: pagePDO:: addCSS()..." );
             }
       }
 
-// 	private function fetchContent() {
-// 		global $database;
-
-// 		$qry = "SELECT * FROM `content` WHERE `pageID` = {$this->pageID}";
-// 		$result = $database->dbQuery( $qry );
-
-// 		foreach( $result as $contentEntry ) {
-// 			$this->pagecontent[] = $contentEntry;
-// 		}
-// 	}
-      
       public function addContent( $contentComponent ) {
             global $database;
             
             $qry = "SELECT * FROM `contents` WHERE `contentID` = {$contentComponent} LIMIT 1";
-//             echo $qry . "<br>";
-            $result = $database->dbQuery( $qry );
-            foreach( $result as $contentItem ) {
-                  $this->pageContent[] = $contentItem['contentText'];
-//                   var_dump( $metaItem );
+            $newContent = new Content();
+            $contArray = $newContent::findByQuery( $qry );
+            if( $newContent ) {
+                  $this->pageContent[] = $contArray;
+            } else {
+                  trigger_error( "newContent $content NOT FOUNF Error:: pagePDO:: addContent()..." );
             }
       }
 
-// 	private function fetchJS() {
-// 		global $database;
-
-// 		$qry = "SELECT * FROM `js` WHERE `pageID` = {$this->pageID}";
-// 		$result = $database->dbQuery( $qry );
-
-// 		foreach( $result as $jsEntry ) {
-// 			$this->pageJS[] = $jsEntry;
-// 		}
-// 	}
-      
       public function addJS( $jsComponent ) {
             global $database;
             
             $qry = "SELECT * FROM `js` WHERE `jsID` = {$jsComponent} LIMIT 1";
-//             echo $qry . "<br>";
-            $result = $database->dbQuery( $qry );
-            foreach( $result as $jsItem ) {
-                  $this->pageJS[] = $jsItem['jsText'];
-//                   var_dump( $metaItem );
+            $newJS = new JS();
+            $jsArray = $newJS::findByQuery( $qry );
+            if( $newJS ) {
+                  $this->pageJS[] = $jsArray;
+            } else {
+                  trigger_error( "newCSS $component NOT FOUND Error:: pagePDO:: add CSS()..." );
             }
       }
 

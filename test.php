@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="lib.css" />
 
 <?php
+ob_start();
 require_once( 'init.inc.php' );
 
 $users = new User();
@@ -32,18 +33,38 @@ foreach ( $mediaArray as $instance ) {
 	echo $instance;
 }
 
-$page = new Page();
-$page->pageName = "Test Page";
-$page->addCSS( 1 );
-$page->pageID = 1;
-$page->addMeta( 1 );
-$page->addJS( 1 );
-$page->addMeta( 2 );
+$page = new Page(1);
+$page->pageName = "Home";
+// $page->addCSS( 1 );
+// $page->pageID = 1;
+// $page->addMeta( 1 );
+// $page->addJS( 1 );
+// $page->addMeta( 2 );
+// $page->addCSS( 2 );
+// $page->addJS( 4 );
+$page->makePage();
 
-echo $page;
+// echo $page;
+$page->renderPage();
 // foreach( $page->pageMeta as $item ) {
-//       echo $item;
+//       echo "<br>";
+//       foreach( $item as $object ) {
+//             echo $object->metaText;
+//       }
 // }
-var_dump( $page );
 
+$page2 = new Page(2);
+$page2->pageName = "Test Page";
+// $page2->addCSS( 1 );
+$page2->pageID = 2;
+// $page2->addMeta( 1 );
+// $page2->addJS( 1 );
+// $page2->addMeta( 2 );
+// $page->addCSS( 2 );
+// $page->addJS( 4 );
+
+// $renderedPage = $page2->makePage();
+// var_dump( $renderedPage );
+$page2->makePage();
+echo $page2;
 ?>
